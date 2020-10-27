@@ -3,7 +3,7 @@
 #
 #  above_kitchen.py
 #
-#  Copyright 2019  <martin@orchardrecovery.com>
+#  Copyright 2019-2020  <martin@orchardrecovery.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,19 +20,21 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#  Version:   0.5
-#  Date:      2019-01-23
+#  Version:   0.6
+#  Date:      2020-10-27
 #
 #  Revisions: 0.1 2019-01-09 Original Issue
 #             0.2 2019-01-14 Use global to store the status of the switch
 #             0.3 2019-01-16 Use GPIO instead of gpiozero
 #             0.4 2019-01-16 Use pigpio instead of GPIO
 #             0.5 2019-01-23 Added logging
+#             0.6 2020-10-27 Use configuration file to determine if we want logging
 #
 #=======================================================================
 # Required imports
 #=======================================================================
 
+import json                                 # JSON    Routines
 import logging                              # Logging Routines
 import requests                             # HTML    Routines
 from signal     import pause                # Wait    Routines
@@ -61,27 +63,37 @@ cassandra_status = -1
 pi               = -1
 
 #=======================================================================
+# Read JSON configuration
+#=======================================================================
+
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+#=======================================================================
 # Called when the GPIO detects a change from out to in
 # Ignore if already in
 #=======================================================================
 def process_switch(gpio, status, tick):
     global martin_status
     global cassandra_status
+    global config
 
     if martin_gpio == gpio:
         if martin_status != status:
             martin_status = status
             PARAMS = {'id':martin_id, 'status':status}
             r = requests.get(url = URL, params = PARAMS)
-            s = '{name} {status} - {result}'.format(name='Martin', status=status, result=r.text)
-            logging.info(s);
+            if True == config['wantLogging']:
+                s = '{name} {status} - {result}'.format(name='Martin', status=status, result=r.text)
+                logging.info(s);
     else:
         if cassandra_status != status:
             cassandra_status = status
             PARAMS = {'id':cassandra_id, 'status':status}
             r = requests.get(url = URL, params = PARAMS)
-            s = '{name} {status} - {result}'.format(name='Cassandra', status=status, result=r.text)
-            logging.info(s);
+            if True == config['wantLogging']:
+                s = '{name} {status} - {result}'.format(name='Cassandra', status=status, result=r.text)
+                logging.info(s);
 
 #=======================================================================
 # Setup Logging since this is running in a daemon
@@ -91,8 +103,9 @@ def process_switch(gpio, status, tick):
 #         and allow logging of CRITICAL, ERROR, WARNING, INFO and DEBUG
 #=======================================================================
 
-logging.basicConfig(filename=LOGFILE, format='%(asctime)s %(message)s', datefmt='%Y/%m/%d %H:%M:%S', level=logging.DEBUG)
-logging.info('System started');
+if True == config['wantLogging']:
+    logging.basicConfig(filename=LOGFILE, format='%(asctime)s %(message)s', datefmt='%Y/%m/%d %H:%M:%S', level=logging.DEBUG)
+    logging.info('System started');
 
 #=======================================================================
 # Configure GPIO

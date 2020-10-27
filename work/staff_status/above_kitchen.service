@@ -1,0 +1,17 @@
+[Unit]
+Description=Raspberry Pi Monitor Above Kitchen switches
+Wants=multi-user.target
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/work/staff_status/above_kitchen.py 
+WorkingDirectory=/home/pi/work/staff_status/
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=above_kitchen
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
