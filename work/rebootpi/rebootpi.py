@@ -20,17 +20,18 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#  Version: 0.2
-#  Date:    2019-01-23
+#  Version: 0.3
+#  Date:    2020-10-27
 #
 #  Revisions: 0.1 2019-01-09 Original Issue
 #             0.2 2019-01-23 Added logging
-
+#             0.3 2020-10-27 Use configuration file to determine if we want logging
 
 #=======================================================================
 # Required imports
 #=======================================================================
 
+import json                                     # JSON routines
 import logging                                  # Logging routines
 from gpiozero   import Button                   # GPIO Button handling
 from signal     import pause                    # Pause program
@@ -54,6 +55,13 @@ LOGFILE   = '/home/pi/work/rebootpi/status.log'
 RESETFILE = '/home/pi/scripts/rebootpi.sh'
 
 #=======================================================================
+# Read JSON configuration
+#=======================================================================
+
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+#=======================================================================
 # Setup Logging since this is running in a daemon
 #    - Output message
 #         to filename LOGFILE
@@ -61,8 +69,9 @@ RESETFILE = '/home/pi/scripts/rebootpi.sh'
 #         and allow logging of CRITICAL, ERROR, WARNING, INFO and DEBUG
 #=======================================================================
 
-logging.basicConfig(filename=LOGFILE, format='%(asctime)s %(message)s', datefmt='%Y/%m/%d %H:%M:%S', level=logging.DEBUG)
-logging.info('System started');
+if True == config['wantLogging']:
+    logging.basicConfig(filename=LOGFILE, format='%(asctime)s %(message)s', datefmt='%Y/%m/%d %H:%M:%S', level=logging.DEBUG)
+    logging.info('System started');
 
 #=======================================================================
 # Main program

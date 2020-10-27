@@ -1,0 +1,17 @@
+[Unit]
+Description=Raspberry Pi Monitor Reboot Service
+Wants=multi-user.target
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/work/rebootpi/rebootpi.py 
+WorkingDirectory=/home/pi/work/rebootpi/
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=rebootpi
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
