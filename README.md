@@ -131,12 +131,21 @@ which is connected to one side of the switch. The other side of the switch is co
   chmod +x /home/pi/work/*/*.py
   ```
 
-* Enable the reboot/halt service.
+* Enable the gpio daemon.
+  ```shell
+  sudo systemctl enable pigpiod
+  ```
+* Start the gpio daemon.
+  ```shell
+  sudo systemctl start pigpiod
+  ```
+
+* Enable the reboot service.
   ```shell
   cd /etc/systemd/system
   sudo systemctl enable /home/pi/work/rebootpi/rebootpi.service
   ```
-* Start the reboot/halt service.
+* Start the reboot service.
   ```shell
   sudo systemctl start rebootpi.service
   ```
