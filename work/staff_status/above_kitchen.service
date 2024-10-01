@@ -1,7 +1,7 @@
 [Unit]
 Description=Raspberry Pi Monitor Above Kitchen switches
-Wants=multi-user.target
-After=multi-user.target
+Wants=multi-user.target pigpiod
+After=multi-user.target pigpiod
 
 [Service]
 ExecStart=/usr/bin/python3 /home/pi/work/staff_status/above_kitchen.py 
@@ -14,4 +14,4 @@ User=root
 Group=root
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target pigpiod
