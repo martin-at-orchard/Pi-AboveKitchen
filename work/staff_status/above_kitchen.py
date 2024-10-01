@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 #
 #  above_kitchen.py
 #
-#  Copyright 2019-2020  <martin@orchardrecovery.com>
+#  Copyright 2019-2024  <martin@orchardrecovery.com>
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -20,8 +19,8 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#  Version:   0.6
-#  Date:      2020-10-27
+#  Version:   0.7
+#  Date:      2024-10-01
 #
 #  Revisions: 0.1 2019-01-09 Original Issue
 #             0.2 2019-01-14 Use global to store the status of the switch
@@ -29,6 +28,7 @@
 #             0.4 2019-01-16 Use pigpio instead of GPIO
 #             0.5 2019-01-23 Added logging
 #             0.6 2020-10-27 Use configuration file to determine if we want logging
+#             0.7 2024-10-01 Change server URL
 #
 #=======================================================================
 # Required imports
@@ -51,7 +51,7 @@ martin_id      = 1                        # ID in OX
 cassandra_gpio = 17                       # Broadcom GPIO17
 cassandra_id   = 115                      # ID in OX
 
-URL            = 'http://ox.orchardrecoveryonline.com/admin/setabovekitchen.php'
+URL            = 'http://ox.o-connect.ca/admin/setabovekitchen.php'
 LOGFILE        = '/home/pi/work/staff_status/status.log'
 
 #=======================================================================
